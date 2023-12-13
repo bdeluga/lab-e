@@ -1,12 +1,12 @@
-import { Component, OnInit } from '@angular/core';
-import { TasksService } from '../tasks.service';
-import { Task } from '../task';
-import { Observable, forkJoin } from 'rxjs';
+import { Component, OnInit } from "@angular/core";
+import { TasksService } from "../tasks.service";
+import { Task } from "../task";
+import { Observable, forkJoin } from "rxjs";
 
 @Component({
-  selector: 'app-tasks',
-  templateUrl: './tasks.component.html',
-  styleUrls: ['./tasks.component.css'],
+  selector: "app-tasks",
+  templateUrl: "./tasks.component.html",
+  styleUrls: ["./tasks.component.css"],
 })
 export class TasksComponent implements OnInit {
   public tasks: Task[] = [];
@@ -62,5 +62,21 @@ export class TasksComponent implements OnInit {
     forkJoin(observables).subscribe(() => {
       this.ngOnInit();
     });
+  }
+  canArchiveCompleted() {
+    for (const task of this.tasks) {
+      if (task.completed) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  canAddTask() {
+    if (this.isProcessing) {
+      return false;
+    }
+
+    return !!this.newTask.title;
   }
 }
